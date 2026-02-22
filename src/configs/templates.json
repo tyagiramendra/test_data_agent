@@ -1,0 +1,68 @@
+[
+{
+  "dataset_config": {
+    "dataset_name": "combinational_data",
+    "type": "combinational",
+    "record_count": 20
+  },
+  "fields": [
+    { "name": "role", "values": ["admin", "user", "guest"] },
+    { "name": "status", "values": ["active", "inactive"] },
+    { "name": "region", "values": ["IN", "US","JP","UK","FR"] }
+  ]
+},
+{
+  "dataset_config": {
+    "dataset_name": "bulk_volume_data",
+    "type": "dynamic",
+    "record_count": 1000
+  },
+  "fields": [
+    { "name": "transaction_id", "type": "uuid" },
+    { "name": "timestamp", "type": "datetime", "start": "2024-01-01", "end": "2025-01-01","format":"%Y-%m-%d %H:%M:%S"},
+    { "name": "amount", "type": "float", "min": 10, "max": 5000 }
+  ]
+},
+{
+  "dataset_config": {
+    "dataset_name": "static_test_data",
+    "type": "static",
+    "record_count": 100
+  },
+  "fields": [
+    {
+      "user_id": "U001",
+      "name": "Test User",
+      "email": "test@example.com",
+      "age": 30,
+      "is_active": true
+    }
+  ]
+},
+{
+  "dataset_config": {
+    "dataset_name": "dynamic_random_data",
+    "type": "dynamic",
+    "record_count": 100
+  },
+  "fields": [
+    { "name": "user_id", "type": "uuid" },
+    { "name": "name", "type": "string", "generator": "name" },
+    { "name": "email", "type": "string", "generator": "email" },
+    { "name": "age", "type": "integer", "min": 18, "max": 65 },
+    { "name": "amount", "type": "float", "min": 100, "max": 5000 }
+  ]
+},
+{
+  "dataset_config": {
+    "dataset_name": "boundary_data",
+    "type": "boundary",
+    "record_count": 100
+  },
+  "fields": [
+    { "name": "age", "values": [0, 1, 17, 18, 65, 66, 120] },
+    { "name": "amount", "values": [-1, 0, 0.01, 999999] },
+    { "name": "password_length", "values": [0, 1, 8, 128, 256] }
+  ]
+}
+]
