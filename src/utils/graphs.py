@@ -1,7 +1,10 @@
 from langgraph.graph import StateGraph, START, END
 from src.utils.generators import *
 from src.utils.state import DataState
-
+from src.utils.state import GeneratorState
+from src.utils.models import model as llm
+from src.utils.prompts import *
+from src.utils.nodes import *
 
 
 # ---------- Nodes ----------
@@ -61,6 +64,42 @@ builder.add_edge("combinational", "export")
 builder.add_edge("export", END)
 
 graph = builder.compile()
+
+
+# Data Generator
+
+genrator_builder = StateGraph(GeneratorState)
+
+genrator_builder.add_node("build_prompt", build_prompt)
+genrator_builder.add_node("llm_generate", llm_generate)
+genrator_builder.add_node("validate", validate)
+genrator_builder.add_node("human_review", human_review)
+
+genrator_builder.set_entry_point("build_prompt")
+
+genrator_builder.add_edge("build_prompt", "llm_generate")
+genrator_builder.add_edge("llm_generate", "validate")
+
+genrator_builder.add_conditional_edges(
+    "validate",
+    validation_router,
+    {
+        "retry": "llm_generate",
+        "human": "human_review",
+        "finish": END
+    }
+)
+
+genrator_builder.add_conditional_edges(
+    "human_review",
+    after_human,
+    {
+        "retry": "llm_generate",
+        "finish": END
+    }
+)
+
+gen_agent = builder.compile()
 
 if __name__ == "__main__":
     pass
